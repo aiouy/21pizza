@@ -21,7 +21,7 @@ def order():
 
 @app.route('/validate')
 @payment.required(100)
-def validate
+def validate():
     return 'nothing'
 
 if __name__ == '__main__':
