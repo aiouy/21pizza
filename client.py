@@ -9,14 +9,32 @@ username = Config().username
 wallet = Wallet()
 requests = BitTransferRequests(wallet, username)
 
-def get_matches():
-    url = 'http://' + SERVER_IP_ADDRESS + ':5000/nhlMatches'
-    r = requests.get(url=url)
+# server address
+server_url = 'http://localhost:5000/'
 
-    print(r.text)
+def pizza():
+
+    #############
+    #           #
+    #   STEP 1  #
+    #           #
+    #############
+    #
+    # create customer object
+    # customerObject = {
+    # firstName: '',
+    # lastName: '',
+    # address: '',
+    # email: ''
+    # }
+
+    order_url = server_url+'order?price={0}'
+    answer = requests.get(url=sel_url.format(int(500)))
+
+    return answer.text
 
 
 
 # start
 if __name__ == '__main__':
-    get_matches()
+    pizza()

@@ -11,12 +11,18 @@ app = Flask(__name__)
 wallet = Wallet()
 payment = Payment(app, wallet)
 
+def get_price(request):
+    return int(request.args['price'])
+
+@app.route('/order')
+@payment.required(get_price)
+def order():
+    return 'Awesome'
 
 @app.route('/validate')
-@payment.required(1000)
-def validate():
-
-    return 'something'
+@payment.required(100)
+def validate
+    return 'nothing'
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
