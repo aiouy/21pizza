@@ -29,7 +29,7 @@ def pizza():
     # }
 
     order_url = server_url+'order?price={0}'
-    answer = requests.get(url=sel_url.format(int(500)))
+    answer = requests.get(url=order_url.format(int(500)))
 
     return answer.text
 
