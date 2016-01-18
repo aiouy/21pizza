@@ -72,7 +72,7 @@ def pizza():
         print('Please enter either 1, 2, or 3')
         sys.exit()
 
-    answer=requests.post(url=order_url, json=order_object)
+    answer=requests.post(url=order_url, data=order_object)
 
     print(answer.text)
 
