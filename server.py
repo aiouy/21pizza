@@ -21,6 +21,7 @@ def bad_request(message):
 def get_price(request):
     print('doing')
     r = requests.post(url='http://localhost:3000/validateAndPrice', json=request.data)
+    print('doing')
     response_status = json.loads(r.text)['result']['Status']
     print(response_status)
 
