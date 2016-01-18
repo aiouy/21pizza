@@ -19,16 +19,17 @@ def bad_request(message):
 
 
 def get_price(request):
+    print('doing')
     r = requests.post(url='http://localhost:3000/validateAndPrice', json=request.data)
-    response_status = json.loads(r.text)["result"]["Status"]
+    response_status = json.loads(r.text)['result']['Status']
     print(response_status)
 
     if int(response_status) == 1 or int(response_status) == 0:
-        price_in_usd = json.loads(r.text)["result"]["Order"]["Amounts"]["Payment"]
+        price_in_usd = json.loads(r.text)['result']['Order']['Amounts']['Payment']
         print(price_in_usd)
 
-        get_bitpay_btc_usd_rate = urllib.request.urlopen(url="https://bitpay.com/api/rates/usd").read().decode("utf-8")
-        usd_per_btc = json.loads(get_bitpay_btc_usd_rate)["rate"]
+        get_bitpay_btc_usd_rate = urllib.request.urlopen(url='https://bitpay.com/api/rates/usd').read().decode('utf-8')
+        usd_per_btc = json.loads(get_bitpay_btc_usd_rate)['rate']
         print(price_in_usd)
 
         price = int(price_in_usd * 10**8 / usd_per_btc)
@@ -60,7 +61,7 @@ def findNearbyStore():
   zip_code = request.args.get('zipCode')
   print(zip_code)
   some_url = 'http://localhost:3000/findStores/' + zip_code
-  r = urllib.request.urlopen(url=some_url).read().decode("utf-8")
+  r = urllib.request.urlopen(url=some_url).read().decode('utf-8')
   returned_data = json.loads(r)
   print(returned_data)
 
