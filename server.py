@@ -28,7 +28,7 @@ def get_price(request):
     return price
 
 
-@app.route('/order')
+@app.route('/order', methods=['POST'])
 @payment.required(get_price)
 def order():
     bad_arguments = getattr(request, 'bad_arguments')
