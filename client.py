@@ -24,12 +24,12 @@ def pizza():
         #   Who's hungry  #
         ###################
 
-        customer: {
-            firstName: 'Barack',
-            lastName: 'Obama',
-            address: '900 Clark Ave, St. Louis, MO, 63102', # all fields required here. Note the commas
-            phone: '1-212-222-2222',
-            email: 'barack@obama.com'
+        'customer': {
+            'firstName': 'Barack',
+            'lastName': 'Obama',
+            'address': '900 Clark Ave, St. Louis, MO, 63102', # all fields required here. Note the commas
+            'phone': '1-212-222-2222',
+            'email': 'barack@obama.com'
         },
 
 
@@ -44,9 +44,9 @@ def pizza():
         # X-Large (16") Hand Tossed Philly Cheese Steak, code: P16IREPH
         #
 
-        item: {
-            code: "14SCREEN",
-            quantity: 1
+        'item': {
+            'code': "14SCREEN",
+            'quantity': 1
         },
 
 
