@@ -32,7 +32,7 @@ def get_price(request):
 @payment.required(get_price)
 def order():
     bad_arguments = getattr(request, 'bad_arguments')
-    if not hasattr(request, 'bad_arguments'):
+    if hasattr(request, 'bad_arguments'):
         return bad_request('Invalid request. Please check your argument(s): {}'.format(', '.join(bad_arguments)))
 
     return 'pizza!'
