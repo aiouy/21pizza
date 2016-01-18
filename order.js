@@ -40,7 +40,8 @@ app.get('/getMenu/:storeId', function(req, res) {
 
 
 app.post('/validateAndPrice', function(req, res) {
-
+  console.log('BODY');
+  console.log(req.body);
   var order = createOrder(req.body);
 
   order.validate(
@@ -104,14 +105,19 @@ function createOrder(requestBody) {
     deliveryMethod: 'Delivery' //Carryout
   });
 
-  var item = new pizzapi.Item(requestBody.item);
-
-  order.addItem(item);
+  var foodItems = requestBody.items;
+  foodItems.forEach(function(code) {
+    var item = {
+      code: code,
+      options: [],
+      quantity: 1
+    };
+    order.addItem(new pizzapi.Item(item));
+  });
 
   order.Phone = requestBody.customer.phone;
 
   return order;
-
 }
 
 app.listen(3000, function() {

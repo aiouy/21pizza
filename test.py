@@ -1,6 +1,8 @@
 import json
-import urllib.request
 import requests
+
+# server address
+server_url = 'http://localhost:5000/'
 
 data_to_send = {
     "customer": {
@@ -16,32 +18,15 @@ data_to_send = {
         "email": "habs7707@gmail.com"
     },
 
-    "item": {
-        "code": "W40PHOTW",
-        "options": [],
-        "quantity": 1
-    },
+    "items": ["W40PHOTW", "W40PPLNW", "W40PBNLW"],
 
     "storeID": "7931"
 }
 
-r = requests.post('http://localhost:3000/validateAndPrice',
-                  json=data_to_send)
-response_status = json.loads(r.text)["result"]["Status"]
-print(response_status)
+# get menu
+find_stores_url = server_url + 'getMenuForStoreID?zipCode=' + data_to_send['customer']['address']['PostalCode']
+r = requests.get(url=find_stores_url).json()
 
-if int(response_status) == 1 or int(response_status) == 0:
-    price_in_usd = json.loads(r.text)["result"]["Order"]["Amounts"]["Payment"]
-    print(price_in_usd)
-
-    get_bitpay_btc_usd_rate = urllib.request.urlopen(url="https://bitpay.com/api/rates/usd").read().decode("utf-8")
-    usd_per_btc = json.loads(get_bitpay_btc_usd_rate)["rate"]
-    print(usd_per_btc)
-
-    price = int(price_in_usd * 10**8 / usd_per_btc)
-    # price = 100
-else:
-    setattr(request, 'error_validate', 'error_validate')
-    price = 0
-
-print(price)
+# validate the user's order and return the price in USD
+resp = requests.post(server_url + 'validate', data=data_to_send)
+print(resp.text)

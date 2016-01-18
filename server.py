@@ -21,7 +21,7 @@ def bad_request(message):
 
 # Validation & get price. Runs through domino validation call and returns the price of the order if valid, else price=0
 def get_price(request):
-    r = requests.post(url='http://localhost:3000/validateAndPrice', json=json.loads(request.data))
+    r = requests.post(url=EXPRESS_SERVER + 'validateAndPrice', json=json.loads(request.data))
     response_status = json.loads(r.text)['result']['Status']
 
     if int(response_status) == 1 or int(response_status) == 0: # not sure what the dominos api response codes are but these seem to not err
@@ -50,14 +50,17 @@ def findNearbyStore():
     return bad_request('general error')
 
     the_store = False
+    # find nearest open store that delivers
     for store in j['result']['Stores']:
     is_open = store['IsOpen']
     is_delivery_store = store['IsDeliveryStore']
     if is_open and is_delivery_store:
         the_store = store
         break
-    if not the_store:
-    return bad_request('no nearby stores exist, or none are open')
+    # delete these after testing
+    #if not the_store:
+    #  return bad_request('no nearby stores exist, or none are open')
+    the_store = j['result']['Stores'][0]
 
     # gather info about the store
     response = {}
@@ -66,11 +69,11 @@ def findNearbyStore():
     response['address'] = the_store['AddressDescription']
     response['delivery_times'] = the_store['ServiceHoursDescription']['Delivery']
 
+    # get menu and send back to client
     menu_url = EXPRESS_SERVER + 'getMenu/' + response['store_id']
     menu = json.loads(requests.get(menu_url).text)
     response['menu'] = menu['result']
     return json.dumps(response)
-
 
 # Orders the pizza. Should pass the user though /validate first but this will run a validation check as well
 @app.route('/order', methods=['POST'])
