@@ -77,7 +77,7 @@ def validate():
 def findNearbyStore():
   zip_code = request.args.get('zipCode')
   print(zip_code)
-  some_url = EXPRESS_SERVER + 'findStores/' + zip_code
+  some_url = 'http://localhost:3000/findStores/' + zip_code
   r = request.get(url=some_url)
   # print(r)
   # print(r.result)
