@@ -50,9 +50,8 @@ def order():
 
 @app.route('/validate', methods=['POST'])
 def validate():
-    print(request.data)
     price = get_price(request)
-    return price
+    return 'price = {0}'.format(price)
 
 @app.route('/findNearbyStore', methods=['GET'])
 def findNearbyStore():
