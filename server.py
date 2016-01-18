@@ -19,7 +19,29 @@ def bad_request(message):
 
 
 def get_price(request):
-    r = requests.post(url='http://localhost:3000/validateAndPrice', data=request.data)
+    data_to_send = {
+        "customer": {
+            "firstName": "Alex",
+            "lastName": "Bitcoins",
+            "address": {
+                "Street": "532 Tyrella Ave #39",
+                "City": "Mountain View",
+                "Region": "CA",
+                "PostalCode": "94043"
+            },
+            "phone": "8023564779",
+            "email": "habs7707@gmail.com"
+        },
+
+        "item": {
+            "code": "W40PHOTW",
+            "options": [],
+            "quantity": 1
+        },
+
+        "storeID": "7931"
+    }
+    r = requests.post(url='http://localhost:3000/validateAndPrice', json=data_to_send)
     response_status = json.loads(r.text)["result"]["Status"]
 
     if int(response_status) == 1 or int(response_status) == 0:
