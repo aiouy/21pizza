@@ -55,8 +55,12 @@ def order():
 @app.route('/validate', methods=['POST'])
 def validate():
     print(request.data)
-    price = get_price(request)
-    return 'price = {0}'.format(price)
+    r = requests.post(url='http://localhost:3000/validateAndPrice', json=req.data)
+    response_status = json.loads(r.text)['result']['Status']
+    print(response_status)
+    return 'awesome'
+    # price = get_price(request)
+    # return 'price = {0}'.format(price)
 
 @app.route('/findNearbyStore', methods=['GET'])
 def findNearbyStore():
