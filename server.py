@@ -77,9 +77,10 @@ def validate():
 def findNearbyStore():
   zip_code = request.args.get('zipCode')
   print(zip_code)
-  r = request.get(url=EXPRESS_SERVER + 'findStores/' + zip_code)
-  print(r)
-  print(r.result)
+  some_url = EXPRESS_SERVER + 'findStores/' + zip_code
+  r = request.get(url=some_url)
+  # print(r)
+  # print(r.result)
 
   return json.dumps(r.result)
 
