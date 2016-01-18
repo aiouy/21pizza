@@ -31,7 +31,6 @@ def get_price(request):
 def order():
     if hasattr(request, 'error_validate'):
         return bad_request('There is a problem with your order details.')
-    else:
 
     return 'Pizza ordered!'
 
