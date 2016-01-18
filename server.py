@@ -35,10 +35,10 @@ def order():
     return request.data
 
 
-@app.route('/validate')
+@app.route('/validate', methods=['POST'])
 @payment.required(1)
 def validate():
-    return 'nothing'
+    return 'validated!'
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
