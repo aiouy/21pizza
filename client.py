@@ -22,9 +22,11 @@ def pizza():
     print("We'll need you to:\n  * Pick a nearby store\n  * Select your meal from the Domino's menu\n  * Enter your delivery information")
 
     # acquire zip code and then get menu for domino's near zip code
-    zip_code = input("\nWhat is the zip code where you want your pizza delivered to: ")
+    zip_code = input("What is the zip code where you want your pizza delivered to: ")
     find_stores_url = server_url + 'getMenuForStoreID?zipCode=' + str(zip_code)
     r = requests.get(url=find_stores_url).json()
+    for menuItem in r['menu']:
+        print(menuItem)
 
     print('\n\n')
     print("######################################")

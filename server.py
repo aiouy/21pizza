@@ -15,8 +15,7 @@ EXPRESS_SERVER = 'http://localhost:3000/'
 
 
 def bad_request(message):
-    response = jsonify({'message': message})
-    response.status_code = 400
+    response = json.dumps({'error': message})
     return response
 
 
@@ -26,8 +25,7 @@ def get_price(request):
     response_status = json.loads(r.text)['result']['Status']
 
     if int(response_status) == 1 or int(response_status) == 0: # not sure what the dominos api response codes are but these seem to not err
-        price_in_usd = json.loads(r.text)['result']['Order'][
-            'Amounts']['Payment']
+        price_in_usd = json.loads(r.text)['result']['Order']['Amounts']['Payment']
 
         get_bitpay_btc_usd_rate = urllib.request.urlopen(url='https://bitpay.com/api/rates/usd').read().decode('utf-8')
         usd_per_btc = json.loads(get_bitpay_btc_usd_rate)['rate']
@@ -41,15 +39,38 @@ def get_price(request):
     return price
 
 
-@app.route('/findNearbyStore', methods=['GET'])
+@app.route('/getMenuForStoreID', methods=['GET'])
 def findNearbyStore():
     zip_code = request.args.get('zipCode')
-    print(zip_code)
-    r = request.get(url=EXPRESS_SERVER + 'findStores/' + zip_code)
-    print(r)
-    print(r.result)
+    some_url = EXPRESS_SERVER + 'findStores/' + zip_code
+    r = requests.get(some_url)
+    j = r.json()
 
-    return json.dumps(r.result)
+    if not j['success']:
+    return bad_request('general error')
+
+    the_store = False
+    for store in j['result']['Stores']:
+    is_open = store['IsOpen']
+    is_delivery_store = store['IsDeliveryStore']
+    if is_open and is_delivery_store:
+        the_store = store
+        break
+    if not the_store:
+    return bad_request('no nearby stores exist, or none are open')
+
+    # gather info about the store
+    response = {}
+    response['store_id'] = the_store['StoreID']
+    response['phone'] = the_store['Phone']
+    response['address'] = the_store['AddressDescription']
+    response['delivery_times'] = the_store['ServiceHoursDescription']['Delivery']
+
+    menu_url = EXPRESS_SERVER + 'getMenu/' + response['store_id']
+    menu = json.loads(requests.get(menu_url).text)
+    response['menu'] = menu['result']
+    return json.dumps(response)
+
 
 # Orders the pizza. Should pass the user though /validate first but this will run a validation check as well
 @app.route('/order', methods=['POST'])
