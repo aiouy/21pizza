@@ -17,7 +17,7 @@ def bad_request(message):
 def get_price(request):
     r = request.post(url='http://localhost:3000/validateAndPrice', json=request.data)
 
-    if r.result.Status == 1 | r.result.Status == 0:
+    if r.result.Status == 1 || r.result.Status == 0:
         price_in_usd = r.result.Order.Amounts.Payment
 
         get_bitpay_btc_usd_rate = request.urlopen(url="https://bitpay.com/api/rates/usd").read().decode("utf-8")
