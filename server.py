@@ -11,6 +11,8 @@ app = Flask(__name__)
 wallet = Wallet()
 payment = Payment(app, wallet)
 
+EXPRESS_SERVER = 'http://localhost:3000/'
+
 
 def bad_request(message):
     response = jsonify({'message': message})
@@ -38,6 +40,17 @@ def get_price(request):
 
     return price
 
+
+@app.route('/findNearbyStore', methods=['GET'])
+def findNearbyStore():
+    zip_code = request.args.get('zipCode')
+    print(zip_code)
+    r = request.get(url=EXPRESS_SERVER + 'findStores/' + zip_code)
+    print(r)
+    print(r.result)
+
+    return json.dumps(r.result)
+
 # Orders the pizza. Should pass the user though /validate first but this will run a validation check as well
 @app.route('/order', methods=['POST'])
 @payment.required(get_price) # get_price function call. If order is invalid, the user is not charged.
@@ -55,19 +68,5 @@ def validate():
     price = get_price(request)
     return 'price = {0}'.format(price) # TODO: return error if price = 0
 
-
-# Find stores near user's ZIP
-@app.route('/findNearbyStore', methods=['GET'])
-def findNearbyStore():
-    zip_code = request.args.get('zipCode')
-    print(zip_code)
-    some_url = 'http://localhost:3000/findStores/' + zip_code
-    r = urllib.request.urlopen(url=some_url).read().decode('utf-8')
-    returned_data = json.loads(r)
-    print(returned_data)
-
-    return 'awesome'
-
-
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0', port=5001)

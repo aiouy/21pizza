@@ -18,63 +18,72 @@ server_url = 'http://localhost:5000/'
 
 def pizza():
 
-    order_object = {
+    print("You are only a few steps away from buying Domino's pizza, 100% funded by Bitcoin!\n")
+    print("We'll need you to:\n  * Pick a nearby store\n  * Select your meal from the Domino's menu\n  * Enter your delivery information")
 
+    # acquire zip code and then get menu for domino's near zip code
+    zip_code = input("\nWhat is the zip code where you want your pizza delivered to: ")
+    find_stores_url = server_url + 'getMenuForStoreID?zipCode=' + str(zip_code)
+    r = requests.get(url=find_stores_url).json()
 
-        ###################
-        #   Who's hungry  #
-        ###################
+    print('\n\n')
+    print("######################################")
+    print("#                Menu                #")
+    print("######################################")
+    counter = 0
+    for menuItem in r['menu']:
+        print('(' + str(counter) + ') ' + str(list(menuItem.keys())[0]))
+        counter = counter + 1
+    print("######################################")
+    print("#                Menu                #")
+    print("######################################")
+    print('\n')
 
-        'customer': {
-            'firstName': 'Alex',
-            'lastName': 'Bitcoins',
-            'address': {
-                'street': '532 Tyrella Ave #39',
-                'city': 'Mountain View',
-                'Region': 'CA', # two letter state code (eg: DC, CA)
-                'PostalCode': '94043' # 5-digit zip code
-            },
-            'phone': '8023564779',
-            'email': 'habs7707@gmail.com'
-        },
+    # show user which Domino's will be delivering their food
+    print("\nThe following Domino's will prepare your meal:")
+    print("## Address ##")
+    print(r['address'])
+    print("## Phone ##")
+    print(r['phone'])
+    print("## Delivery Times ##")
+    print(r['delivery_times'])
 
+    # get desired menu items from user
+    orderItems = input("\nPlease give a comma separated list of the indices of the items you'd like to order from the menu above: ")
+    orderItems = orderItems.split(',')
+    chosenItems = []
+    for index in orderItems:
+        chosenItems.append(r['menu'][int(index)])
 
-        ###################
-        #       Menu      #
-        ###################
+    # make sure user typed the items they wanted
+    print('\n')
+    for i in chosenItems:
+        print(i)
+    ok = input('Are the above choices correct? type "ok" if you want to order these items: ')
+    if ok != 'ok':
+        print('NO PIZZA FOR YOU!')
+        sys.exit(1)
 
+    # get info necessary to create order
+    print('\nPlease enter the following information necessary to create your order')
+    parameters = {}
+    customer = {}
+    customer['firstName'] = input('First Name: ')
+    customer['lastName'] = input('Last Name: ')
+    address = {}
+    address['street'] = input('Street Address: ')
+    address['city'] = input('City: ')
+    address['Region'] = input('State: ')
+    address['PostalCode'] = input('Zip Code: ')
+    customer['address'] = address
+    parameters['customer'] = customer
+    parameters['items'] = [list(x.values())[0] for x in chosenItems]
+    parameters['storeID'] = r['store_id']
 
-        'item': {
-            'code': "W40PHOTW",
-            'quantity': 1
-        },
+    # validate the user's order and return the price in USD
+    resp = requests.post(server_url + 'validate', data=parameters)
 
-
-        ###################
-        #     Store ID    #
-        ###################
-        #
-        #
-        'storeID': '7931'  # string
-
-    }
-
-    ########### DO NOT EDIT BELOW ###########
-
-    # task = input("Tasks (enter 1, 2, 3):\n1. Find store ID\n2. Validate inputs and get price (this should always be done first)\n3. Order\n")
-    # if int(task) == 1:
-    #     print('Awesome!')
-    # elif int(task) == 2:
-    # elif int(task) == 3:
-    #     order_url = server_url + 'order'
-    # else:
-    #     print('Please enter either 1, 2, or 3')
-    #     sys.exit()
-
-    order_url = server_url + 'validate'
-    answer=requests.post(url=order_url, json=order_object)
-
-    print(answer.text)
+    print(resp.text)
 
 
 # start
