@@ -35,7 +35,7 @@ def order():
     if hasattr(request, 'bad_arguments'):
         return bad_request('Invalid request. Please check your argument(s): {}'.format(', '.join(bad_arguments)))
 
-    return request.data
+    return jsonify(json.loads(request.data))
 
 
 @app.route('/validate')
