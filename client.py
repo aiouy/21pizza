@@ -6,6 +6,7 @@ from two1.lib.bitrequests import BitTransferRequests
 
 import json
 import sys
+import requests as reqs
 
 # Configure your Bitcoin wallet.
 username = Config().username
@@ -61,18 +62,18 @@ def pizza():
 
     ########### DO NOT EDIT BELOW ###########
 
-    task = input("Tasks (enter 1, 2, 3):\n1. Find store ID\n2. Validate inputs and get price (this should always be done first)\n3. Order\n")
-    if int(task) == 1:
-        print('Awesome!')
-    elif int(task) == 2:
-        order_url = server_url + 'validate'
-    elif int(task) == 3:
-        order_url = server_url + 'order'
-    else:
-        print('Please enter either 1, 2, or 3')
-        sys.exit()
+    # task = input("Tasks (enter 1, 2, 3):\n1. Find store ID\n2. Validate inputs and get price (this should always be done first)\n3. Order\n")
+    # if int(task) == 1:
+    #     print('Awesome!')
+    # elif int(task) == 2:
+    # elif int(task) == 3:
+    #     order_url = server_url + 'order'
+    # else:
+    #     print('Please enter either 1, 2, or 3')
+    #     sys.exit()
 
-    answer=requests.post(url=order_url, data=order_object)
+    order_url = server_url + 'validate'
+    answer=reqs.post(url=order_url, json=order_object)
 
     print(answer.text)
 
