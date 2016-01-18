@@ -1,0 +1,25 @@
+{
+  "name": "21dominos",
+  "version": "1.0.0",
+  "description": "",
+  "main": "order.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://roybrey@bitbucket.org/jamiouny/21dominos.git"
+  },
+  "keywords": [
+    "domino",
+    "node"
+  ],
+  "author": "",
+  "license": "ISC",
+  "homepage": "https://bitbucket.org/jamiouny/21dominos#readme",
+  "dependencies": {
+    "body-parser": "^1.14.2",
+    "express": "^4.13.3",
+    "pizzapi": "0.0.8"
+  }
+}
