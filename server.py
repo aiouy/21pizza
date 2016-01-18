@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 from two1.lib.wallet import Wallet
 from two1.lib.bitserv.flask import Payment
-from flask import Flask, jsonify
+from flask import Flask, request, jsonify
 
 import urllib.request
 import json
