@@ -55,7 +55,7 @@ def order():
 @app.route('/validate', methods=['POST'])
 def validate():
     print(request.data)
-    r = requests.post(url='http://localhost:3000/validateAndPrice', json=req.data)
+    r = requests.post(url='http://localhost:3000/validateAndPrice', json=request.data)
     response_status = json.loads(r.text)['result']['Status']
     print(response_status)
     return 'awesome'

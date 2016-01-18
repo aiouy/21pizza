@@ -6,7 +6,6 @@ from two1.lib.bitrequests import BitTransferRequests
 
 import json
 import sys
-import requests as reqs
 
 # Configure your Bitcoin wallet.
 username = Config().username
@@ -73,7 +72,7 @@ def pizza():
     #     sys.exit()
 
     order_url = server_url + 'validate'
-    answer=reqs.post(url=order_url, json=order_object)
+    answer=requests.post(url=order_url, json=order_object)
 
     print(answer.text)
 
