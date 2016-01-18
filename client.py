@@ -4,7 +4,8 @@ from two1.commands.config import Config
 from two1.lib.wallet import Wallet
 from two1.lib.bitrequests import BitTransferRequests
 
-import json, sys
+import json
+import sys
 
 # Configure your Bitcoin wallet.
 username = Config().username
@@ -27,7 +28,8 @@ def pizza():
         'customer': {
             'firstName': 'Barack',
             'lastName': 'Obama',
-            'address': '900 Clark Ave, St. Louis, MO, 63102', # all fields required here. Note the commas
+            # all fields required here. Note the commas
+            'address': '900 Clark Ave, St. Louis, MO, 63102',
             'phone': '1-212-222-2222',
             'email': 'barack@obama.com'
         },
@@ -55,7 +57,7 @@ def pizza():
         ###################
         #
         #
-        'storeID': 1234 # int
+        'storeID': 1234  # int
 
     }
 
@@ -64,14 +66,14 @@ def pizza():
     task = input("Tasks (enter 1 or 2):\n1. Validate inputs and get price (this should always be done first)\n2. Order\n"
 
     if task == 1:
-        order_url = server_url+'validate'
+        order_url = server_url + 'validate'
     elif task == 2:
-        order_url = server_url+'order'
+        order_url = server_url + 'order'
     else:
         print('Please enter either 1 or 2')
         sys.exit()
 
-    answer = requests.post(url=order_url, json=order_object)
+    answer=requests.post(url=order_url, json=order_object)
 
     print(answer.text)
 
