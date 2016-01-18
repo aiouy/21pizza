@@ -19,6 +19,7 @@
   "homepage": "https://bitbucket.org/jamiouny/21dominos#readme",
   "dependencies": {
     "body-parser": "^1.14.2",
+    "dominos": "^2.0.0",
     "express": "^4.13.3",
     "pizzapi": "0.0.8"
   }
