@@ -15,7 +15,7 @@ def bad_request(message):
 
 
 def get_price(request):
-    # r = request.post(url='http://localhost:3000/validateAndPrice', json=request.data)
+    r = request.post(url='http://localhost:3000/validateAndPrice', json=request.data)
     status = 'success'
 
     if status == 'success':
@@ -32,7 +32,7 @@ def get_price(request):
 def order():
     if hasattr(request, 'error_validate'):
         return bad_request('There is a problem with your order details.')
-    return request.data
+    return 'Pizza ordered!'
 
 
 @app.route('/validate', methods=['POST'])

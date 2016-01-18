@@ -28,9 +28,13 @@ def pizza():
         'customer': {
             'firstName': 'Barack',
             'lastName': 'Obama',
-            # all fields required here. Note the commas
-            'address': '900 Clark Ave, St. Louis, MO, 63102',
-            'phone': '1-212-222-2222',
+            'address': {
+                'street': '700 Pennsylvania Avenue',
+                'city': 'Washington',
+                'Region': 'DC', # two letter state code (eg: DC, CA)
+                'PostalCode': '12345' # 5-digit zip code
+            },
+            'phone': '2121234567',
             'email': 'barack@obama.com'
         },
 
@@ -38,13 +42,7 @@ def pizza():
         ###################
         #       Menu      #
         ###################
-        #
-        # Small (10") Gluten Free Crust Pizza, code: P10IGFZA
-        # Medium (14") Hand Tossed Pizza, code: 14SCREEN
-        # Large (16") Hand Tossed Pizza, code: 16SCREEN
-        # X-Large (16") Hand Tossed Honolulu Hawaiian Pizza, code: P16IREUH
-        # X-Large (16") Hand Tossed Philly Cheese Steak, code: P16IREPH
-        #
+
 
         'item': {
             'code': "14SCREEN",
@@ -63,14 +61,17 @@ def pizza():
 
     ########### DO NOT EDIT BELOW ###########
 
-    task = input("Tasks (enter 1 or 2):\n1. Validate inputs and get price (this should always be done first)\n2. Order\n")
-
+    task = input("Tasks (enter 1 or 2):\n1. Find store ID\n2. Validate inputs and get price (this should always be done first)\n3. Order\n")
     if int(task) == 1:
-        order_url = server_url + 'validate'
+        zip_code = input("Please enter your 5 digit zip code\n")
+        get_store_request_url = server_url + 'storeID'
+        req = requests.get(url=)
     elif int(task) == 2:
+        order_url = server_url + 'validate'
+    elif int(task) == 3:
         order_url = server_url + 'order'
     else:
-        print('Please enter either 1 or 2')
+        print('Please enter either 1, 2, or 3')
         sys.exit()
 
     answer=requests.post(url=order_url, json=order_object)
