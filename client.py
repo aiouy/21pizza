@@ -63,7 +63,7 @@ def pizza():
 
     order_url = server_url+'order'
     headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
-    answer = requests.post(url=order_url, data=json.dumps(order_object), headers=headers)
+    answer = requests.post(url=order_url, json=order_object, headers=headers)
 
     return answer.text
 
