@@ -41,7 +41,7 @@ def get_price(request):
 
         "storeID": "7931"
     }
-    r = requests.post(url='http://localhost:3000/validateAndPrice', json=data_to_send)
+    r = requests.post(url='http://localhost:3000/validateAndPrice', json=request.data)
     response_status = json.loads(r.text)["result"]["Status"]
 
     if int(response_status) == 1 or int(response_status) == 0:
@@ -72,6 +72,17 @@ def order():
 def validate():
     price = get_price(request)
     return price
+
+@app.route('/findNearbyStore', methods=['GET'])
+def findNearbyStore():
+  zip_code = request.args.get('zipCode')
+  print(zip_code)
+  r = request.get(url=EXPRESS_SERVER + 'findStores/' + zip_code)
+  print(r)
+  print(r.result)
+
+  return json.dumps(r.result)
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
