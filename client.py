@@ -65,7 +65,7 @@ def pizza():
 
     task = input("Tasks (enter 1 or 2):\n1. Validate inputs and get price (this should always be done first)\n2. Order\n"
 
-    if task == 1:
+    if 1 == 1:
         order_url = server_url + 'validate'
     elif task == 2:
         order_url = server_url + 'order'
