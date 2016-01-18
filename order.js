@@ -86,6 +86,8 @@ function createOrder(requestBody) {
 
   order.addItem(item);
 
+  order.Phone = requestBody.customer.phone;
+
   return order;
 
 }
