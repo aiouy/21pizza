@@ -42,8 +42,8 @@ def order():
 
 @app.route('/validate', methods=['POST'])
 def validate():
-    # price = get_price(request)
-    return 'Awesome!'
+    price = get_price(request)
+    return price
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
