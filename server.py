@@ -3,7 +3,7 @@ from two1.lib.wallet import Wallet
 from two1.lib.bitserv.flask import Payment
 from flask import Flask, jsonify
 
-import urllib.request as request
+import urllib.request
 import json
 import requests
 
@@ -47,7 +47,7 @@ def get_price(request):
     if int(response_status) == 1 or int(response_status) == 0:
         price_in_usd = json.loads(r.text)["result"]["Order"]["Amounts"]["Payment"]
 
-        get_bitpay_btc_usd_rate = request.urlopen(url="https://bitpay.com/api/rates/usd").read().decode("utf-8")
+        get_bitpay_btc_usd_rate = urllib.request.urlopen(url="https://bitpay.com/api/rates/usd").read().decode("utf-8")
         usd_per_btc = json.loads(get_bitpay_btc_usd_rate)["rate"]
 
         # price = int(price_in_usd * 10**8 / usd_per_btc)
@@ -75,14 +75,14 @@ def validate():
 
 @app.route('/findNearbyStore', methods=['GET'])
 def findNearbyStore():
-  # zip_code = request.args.get('zipCode')
-  # print(zip_code)
-  # some_url = 'http://localhost:3000/findStores/' + zip_code
-  # r = request.get(url=some_url)
-  # print(r)
-  # print(r.result)
+  zip_code = request.args.get('zipCode')
+  print(zip_code)
+  some_url = 'http://localhost:3000/findStores/' + zip_code
+  r = request.get(url=some_url)
+  print(r)
+  print(r.result)
 
-  return 'awesome'
+  return r.text
 
 
 if __name__ == '__main__':
