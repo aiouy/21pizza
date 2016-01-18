@@ -31,7 +31,7 @@ def get_price(request):
 @app.route('/order', methods=['POST'])
 @payment.required(get_price)
 def order():
-    return 'pizza!'
+    return request.data
 
 
 @app.route('/validate')
