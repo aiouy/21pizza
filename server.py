@@ -16,10 +16,9 @@ def bad_request(message):
 
 def get_price(request):
     r = request.post(url='http://localhost:3000/validateAndPrice', json=request.data)
-    status = 'success'
 
-    if status == 'success':
-        price = 100
+    if r.result.Status == 1 | r.result.Status == 0:
+        price = r.result.Order.Amounts.Payment
     else:
         setattr(request, 'error_validate', 'error_validate')
         price = 0

@@ -26,16 +26,16 @@ def pizza():
         ###################
 
         'customer': {
-            'firstName': 'Barack',
-            'lastName': 'Obama',
+            'firstName': 'Alex',
+            'lastName': 'Bitcoins',
             'address': {
-                'street': '700 Pennsylvania Avenue',
-                'city': 'Washington',
-                'Region': 'DC', # two letter state code (eg: DC, CA)
-                'PostalCode': '12345' # 5-digit zip code
+                'street': '532 Tyrella Ave #39',
+                'city': 'Mountain View',
+                'Region': 'CA', # two letter state code (eg: DC, CA)
+                'PostalCode': '94043' # 5-digit zip code
             },
-            'phone': '2121234567',
-            'email': 'barack@obama.com'
+            'phone': '8023564779',
+            'email': 'habs7707@gmail.com'
         },
 
 
@@ -45,7 +45,7 @@ def pizza():
 
 
         'item': {
-            'code': "14SCREEN",
+            'code': "W40PHOTW",
             'quantity': 1
         },
 
@@ -55,13 +55,13 @@ def pizza():
         ###################
         #
         #
-        'storeID': 1234  # int
+        'storeID': '7931'  # string
 
     }
 
     ########### DO NOT EDIT BELOW ###########
 
-    task = input("Tasks (enter 1 or 2):\n1. Find store ID\n2. Validate inputs and get price (this should always be done first)\n3. Order\n")
+    task = input("Tasks (enter 1, 2, 3):\n1. Find store ID\n2. Validate inputs and get price (this should always be done first)\n3. Order\n")
     if int(task) == 1:
         zip_code = input("Please enter your 5 digit zip code\n")
         get_store_request_url = server_url + 'storeID'
