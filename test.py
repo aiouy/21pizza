@@ -1,11 +1,10 @@
-import sys
+import json
+import urllib.request as request
 
-task = input("Tasks (enter 1 or 2):\n1. Validate inputs and get price (this should always be done first)\n2. Order\n")
-print(task)
-if int(task) == 1:
-    print('awesome: 1')
-elif int(task) == 2:
-    print('awesome: 2')
-else:
-    print('Please enter either 1 or 2')
-    sys.exit()
+price_in_usd = 34.55
+get_bitpay_btc_usd_rate = request.urlopen(url="https://bitpay.com/api/rates/usd").read().decode("utf-8")
+data = json.loads(get_bitpay_btc_usd_rate)["rate"]
+
+print(data)
+# price = price_in_usd * 10^8 / get_bitpay_btc_usd_rate.rate
+# print(price)
