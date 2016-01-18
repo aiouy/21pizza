@@ -15,6 +15,7 @@ def bad_request(message):
 
 
 def get_price(request):
+    print(request.data)
     bad_arguments = []
     if not request.args.get('address'):
         bad_arguments.append('address')
