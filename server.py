@@ -18,50 +18,45 @@ def bad_request(message):
     return response
 
 
-def get_price(req):
-    print(req.data)
-    r = requests.post(url='http://localhost:3000/validateAndPrice', json=req.data)
-    print('doing')
+# Validation & get price. Runs through domino validation call and returns the price of the order if valid, else price=0
+def get_price(request):
+    r = requests.post(url='http://localhost:3000/validateAndPrice', json=json.loads(request.data))
     response_status = json.loads(r.text)['result']['Status']
-    print(response_status)
 
-    if int(response_status) == 1 or int(response_status) == 0:
-        price_in_usd = json.loads(r.text)['result']['Order']['Amounts']['Payment']
-        print(price_in_usd)
+    if int(response_status) == 1 or int(response_status) == 0: # not sure what the dominos api response codes are but these seem to not err
+        price_in_usd = json.loads(r.text)['result']['Order'][
+            'Amounts']['Payment']
 
         get_bitpay_btc_usd_rate = urllib.request.urlopen(url='https://bitpay.com/api/rates/usd').read().decode('utf-8')
         usd_per_btc = json.loads(get_bitpay_btc_usd_rate)['rate']
-        print(price_in_usd)
 
         price = int(price_in_usd * 10**8 / usd_per_btc)
         print(price)
-        # price = 100
     else:
         setattr(request, 'error_validate', 'error_validate')
         price = 0
 
     return price
 
-
+# Orders the pizza. Should pass the user though /validate first but this will run a validation check as well
 @app.route('/order', methods=['POST'])
-@payment.required(get_price)
+@payment.required(get_price) # get_price function call. If order is invalid, the user is not charged.
 def order():
     if hasattr(request, 'error_validate'):
         return bad_request('There is a problem with your order details.')
 
-    return 'Pizza ordered!'
+    # TODO: call order function on order.js
+    return 'Pizza ordered!' # TODO: Add response details
 
 
+# Runs dominos validate function and should return price if the order details are valid, else return error
 @app.route('/validate', methods=['POST'])
 def validate():
-    print(request.data)
-    r = requests.post(url='http://localhost:3000/validateAndPrice', json=request.data)
-    response_status = json.loads(r.text)['result']['Status']
-    print(response_status)
-    return 'awesome'
-    # price = get_price(request)
-    # return 'price = {0}'.format(price)
+    price = get_price(request)
+    return 'price = {0}'.format(price) # TODO: return error if price = 0
 
+
+# Find stores near user's ZIP
 @app.route('/findNearbyStore', methods=['GET'])
 def findNearbyStore():
     zip_code = request.args.get('zipCode')
