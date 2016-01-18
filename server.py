@@ -15,14 +15,13 @@ def bad_request(message):
 
 
 def get_price(request):
-    bad_arguments = []
-    # if not request.args.get('address'):
-    #     bad_arguments.append('address')
+    # r = request.post(url='http://localhost:3000/validateAndPrice', json=request.data)
+    r.status = 'error'
 
-    if not len(bad_arguments):
-        price = 10  # validator
+    if r.status == 'success':
+        price = r.price
     else:
-        setattr(request, 'bad_arguments', bad_arguments)
+        setattr(request, 'error_validate', 'error_validate')
         price = 0
 
     return price
@@ -31,6 +30,8 @@ def get_price(request):
 @app.route('/order', methods=['POST'])
 @payment.required(get_price)
 def order():
+    if hasattr(request, 'error_validate'):
+        return bad_request('There is a problem with your order details.')
     return request.data
 
 
