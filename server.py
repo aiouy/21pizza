@@ -3,6 +3,10 @@ from two1.lib.wallet import Wallet
 from two1.lib.bitserv.flask import Payment
 from flask import Flask, jsonify
 
+import urllib.request as request
+import json
+import requests
+
 app = Flask(__name__)
 wallet = Wallet()
 payment = Payment(app, wallet)
@@ -15,11 +19,11 @@ def bad_request(message):
 
 
 def get_price(request):
-    r = request.post(url='http://localhost:3000/validateAndPrice', json=request.data)
-    response_data = json.loads(r.read().decode("utf-8"))
+    r = requests.post(url='http://localhost:3000/validateAndPrice', json=request.data)
+    response_status = json.loads(r.text)["result"]["Status"]
 
-    if response_data.result.Status == 1 or response_data.result.Status == 0:
-        price_in_usd = r.result.Order.Amounts.Payment
+    if int(response_status) == 1 or int(response_status) == 0:
+        price_in_usd = json.loads(r.text)["result"]["Order"]["Amounts"]["Payment"]
 
         get_bitpay_btc_usd_rate = request.urlopen(url="https://bitpay.com/api/rates/usd").read().decode("utf-8")
         usd_per_btc = json.loads(get_bitpay_btc_usd_rate)["rate"]
