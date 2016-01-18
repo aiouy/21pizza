@@ -19,7 +19,7 @@ def bad_request(message):
 
 
 def get_price(req):
-    print('doing')
+    print(req.data)
     r = requests.post(url='http://localhost:3000/validateAndPrice', json=req.data)
     print('doing')
     response_status = json.loads(r.text)['result']['Status']
@@ -54,19 +54,20 @@ def order():
 
 @app.route('/validate', methods=['POST'])
 def validate():
+    print(request.data)
     price = get_price(request)
     return 'price = {0}'.format(price)
 
 @app.route('/findNearbyStore', methods=['GET'])
 def findNearbyStore():
-  zip_code = request.args.get('zipCode')
-  print(zip_code)
-  some_url = 'http://localhost:3000/findStores/' + zip_code
-  r = urllib.request.urlopen(url=some_url).read().decode('utf-8')
-  returned_data = json.loads(r)
-  print(returned_data)
+    zip_code = request.args.get('zipCode')
+    print(zip_code)
+    some_url = 'http://localhost:3000/findStores/' + zip_code
+    r = urllib.request.urlopen(url=some_url).read().decode('utf-8')
+    returned_data = json.loads(r)
+    print(returned_data)
 
-  return 'awesome'
+    return 'awesome'
 
 
 if __name__ == '__main__':
