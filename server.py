@@ -50,7 +50,7 @@ def order():
 
 @app.route('/validate', methods=['POST'])
 def validate():
-    print(request)
+    print(request.data)
     price = get_price(request)
     return price
 
