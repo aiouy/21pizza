@@ -82,7 +82,7 @@ def findNearbyStore():
   # print(r)
   # print(r.result)
 
-  return json.dumps(r.result)
+  return 'awesome'
 
 
 if __name__ == '__main__':
