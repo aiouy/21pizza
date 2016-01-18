@@ -79,9 +79,9 @@ def findNearbyStore():
   print(zip_code)
   some_url = 'http://localhost:3000/findStores/' + zip_code
   r = urllib.request.urlopen(url=some_url).read().decode("utf-8")
-  print(json.loads(r))
+  returned_data = json.loads(r)
 
-  return r.text
+  return returned_data
 
 
 if __name__ == '__main__':
