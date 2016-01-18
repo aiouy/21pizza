@@ -63,11 +63,11 @@ def pizza():
 
     ########### DO NOT EDIT BELOW ###########
 
-    task = input("Tasks (enter 1 or 2):\n1. Validate inputs and get price (this should always be done first)\n2. Order\n"
+    task = input("Tasks (enter 1 or 2):\n1. Validate inputs and get price (this should always be done first)\n2. Order\n")
 
-    if 1 == 1:
+    if int(task) == 1:
         order_url = server_url + 'validate'
-    elif task == 2:
+    elif int(task) == 2:
         order_url = server_url + 'order'
     else:
         print('Please enter either 1 or 2')
