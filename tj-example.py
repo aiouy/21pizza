@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 from two1.lib.wallet import Wallet
 from two1.lib.bitserv.flask import Payment
 from flask import Flask, request, jsonify
@@ -14,13 +13,17 @@ def bad_request(message):
     return response
 
 
-def get_price(request):
+def handle_payment(request):
     bad_arguments = []
     if not request.args.get('address'):
         bad_arguments.append('address')
+    if not request.args.get('pizza_type'):
+        bad_arguments.append('pizza_type')
+    if not request.args.get('delivery_time'):
+        bad_arguments.append('delivery_time')
 
     if not len(bad_arguments):
-        price = 10  # validator
+        price = 1000  # satoshi
     else:
         setattr(request, 'bad_arguments', bad_arguments)
         price = 0
@@ -29,19 +32,14 @@ def get_price(request):
 
 
 @app.route('/order')
-@payment.required(get_price)
-def order():
+@payment.required(handle_payment)
+def myendpoint():
     bad_arguments = getattr(request, 'bad_arguments')
     if hasattr(request, 'bad_arguments'):
-        return bad_request('Invalid request. Please check your argument(s): {}'.format(', '.join(bad_arguments)))
+        return bad_request('You entered a bad argument(s): {}'.format(', '.join(bad_arguments)))
 
-    return 'Awesome'
+    return 'pizza time!'
 
-
-@app.route('/validate')
-@payment.required(1)
-def validate():
-    return 'nothing'
-
+# Set up and run the server
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
