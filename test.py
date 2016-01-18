@@ -1,5 +1,5 @@
 import json
-import urllib.request as request
+import urllib.request
 import requests
 
 data_to_send = {
@@ -28,15 +28,18 @@ data_to_send = {
 r = requests.post('http://localhost:3000/validateAndPrice',
                   json=data_to_send)
 response_status = json.loads(r.text)["result"]["Status"]
+print(response_status)
 
 if int(response_status) == 1 or int(response_status) == 0:
     price_in_usd = json.loads(r.text)["result"]["Order"]["Amounts"]["Payment"]
+    print(price_in_usd)
 
-    get_bitpay_btc_usd_rate = request.urlopen(
-        url="https://bitpay.com/api/rates/usd").read().decode("utf-8")
+    get_bitpay_btc_usd_rate = urllib.request.urlopen(url="https://bitpay.com/api/rates/usd").read().decode("utf-8")
     usd_per_btc = json.loads(get_bitpay_btc_usd_rate)["rate"]
+    print(usd_per_btc)
 
     price = int(price_in_usd * 10**8 / usd_per_btc)
+    # price = 100
 else:
     setattr(request, 'error_validate', 'error_validate')
     price = 0
