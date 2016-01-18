@@ -35,7 +35,7 @@ def order():
     if not hasattr(request, 'bad_arguments'):
         return bad_request('Invalid request. Please check your argument(s): {}'.format(', '.join(bad_arguments)))
 
-    return request.json().data
+    return 'pizza!'
 
 
 @app.route('/validate')
