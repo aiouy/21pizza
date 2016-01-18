@@ -31,13 +31,16 @@ def get_price(request):
 def order():
     if hasattr(request, 'error_validate'):
         return bad_request('There is a problem with your order details.')
+    else:
+
     return 'Pizza ordered!'
 
 
 @app.route('/validate', methods=['POST'])
 @payment.required(1)
 def validate():
-    return 'validated!'
+    price = get_price(request)
+    return price
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5001)
