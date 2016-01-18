@@ -63,9 +63,7 @@ def pizza():
 
     task = input("Tasks (enter 1, 2, 3):\n1. Find store ID\n2. Validate inputs and get price (this should always be done first)\n3. Order\n")
     if int(task) == 1:
-        zip_code = input("Please enter your 5 digit zip code\n")
-        get_store_request_url = server_url + 'storeID'
-        req = requests.get(url=)
+        print('Awesome!')
     elif int(task) == 2:
         order_url = server_url + 'validate'
     elif int(task) == 3:
