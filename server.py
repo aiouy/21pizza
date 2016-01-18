@@ -15,10 +15,9 @@ def bad_request(message):
 
 
 def get_price(request):
-    print(request.data)
     bad_arguments = []
-    if not request.args.get('address'):
-        bad_arguments.append('address')
+    # if not request.args.get('address'):
+    #     bad_arguments.append('address')
 
     if not len(bad_arguments):
         price = 10  # validator
@@ -36,7 +35,7 @@ def order():
     if hasattr(request, 'bad_arguments'):
         return bad_request('Invalid request. Please check your argument(s): {}'.format(', '.join(bad_arguments)))
 
-    return 'Awesome'
+    return request.data
 
 
 @app.route('/validate')
