@@ -79,10 +79,10 @@ def findNearbyStore():
   print(zip_code)
   some_url = 'http://localhost:3000/findStores/' + zip_code
   r = urllib.request.urlopen(url=some_url)
-  # print(r)
-  # print(r.result)
+  print(r)
+  print(r.result)
 
-  return 'awesome'
+  return r.text
 
 
 if __name__ == '__main__':
