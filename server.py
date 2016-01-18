@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 from two1.lib.wallet import Wallet
 from two1.lib.bitserv.flask import Payment
-from flask import Flask, request, jsonify
+from flask import Flask, jsonify
 
 app = Flask(__name__)
 wallet = Wallet()
@@ -41,10 +41,9 @@ def order():
 
 
 @app.route('/validate', methods=['POST'])
-@payment.required(1)
 def validate():
-    price = get_price(request)
-    return price
+    # price = get_price(request)
+    return 'Awesome!'
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5001)
