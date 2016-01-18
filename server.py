@@ -18,9 +18,9 @@ def bad_request(message):
     return response
 
 
-def get_price(request):
+def get_price(req):
     print('doing')
-    r = requests.post(url='http://localhost:3000/validateAndPrice', json=request.data)
+    r = requests.post(url='http://localhost:3000/validateAndPrice', json=req.data)
     print('doing')
     response_status = json.loads(r.text)['result']['Status']
     print(response_status)
