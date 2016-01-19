@@ -75,6 +75,7 @@ def findNearbyStore():
     response['menu'] = menu['result']
     return json.dumps(response)
 
+
 # Orders the pizza. Should pass the user though /validate first but this will run a validation check as well
 @app.route('/order', methods=['POST'])
 @payment.required(get_price) # get_price function call. If order is invalid, the user is not charged.
@@ -91,6 +92,7 @@ def order():
 def validate():
     price = get_price(request)
     return 'price = {0}'.format(price) # TODO: return error if price = 0
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5001)
