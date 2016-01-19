@@ -40,7 +40,8 @@ app.get('/getMenu/:storeId', function(req, res) {
 
 
 app.post('/validateAndPrice', function(req, res) {
-
+  console.log('BODY');
+  console.log(req.body);
   var order = createOrder(req.body);
 
   order.validate(
@@ -67,8 +68,8 @@ app.post('/order', function(req, res) {
 
   var cardNumber = process.env.PIZZAPI_CARD_NUMBER || '2222333344445555';
   var expiration = process.env.PIZZAPI_CARD_EXPIRATION || '0115';
-  var securityCode = process.env.PIZZAPI_CARD_SEC_CODE || '007';
-  var postalCode = '90210'; // Billing Zipcode
+  var securityCode = process.env.PIZZAPI_CARD_CVV || '007';
+  var postalCode = process.env.PIZZAPI_CARD_ZIP || '90210'; // Billing Zipcode
 
   var cardInfo = new order.PaymentObject();
   cardInfo.Amount = order.Amounts.Customer;
@@ -104,14 +105,19 @@ function createOrder(requestBody) {
     deliveryMethod: 'Delivery' //Carryout
   });
 
-  var item = new pizzapi.Item(requestBody.item);
-
-  order.addItem(item);
+  var foodItems = requestBody.items;
+  foodItems.forEach(function(code) {
+    var item = {
+      code: code,
+      options: [],
+      quantity: 1
+    };
+    order.addItem(new pizzapi.Item(item));
+  });
 
   order.Phone = requestBody.customer.phone;
 
   return order;
-
 }
 
 app.listen(3000, function() {
