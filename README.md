@@ -24,10 +24,10 @@
 ### client.py
 
 - [X] Prompt user for zip code
-- [ ] Using zip code display menu to nearest store `[server.py: /getMenuForStoreID]`
-- [ ] Prompt user for menu item code(s)
-- [ ] Confirm menu & store location
-- [ ] Prompt user for full address
+- [X] Using zip code display menu to nearest store `[server.py: /getMenuForStoreID]`
+- [X] Prompt user for menu item code(s)
+- [X] Confirm menu & store location
+- [X] Prompt user for full address
 - [ ] Build order and send request to server.py for verification `[server.py: /validate]`
 - [ ] Server.py returns price if order is valid and prompts confirmation of payment in usd & satoshi. If order is not valid, throw error
 - [ ] Complete order `[server.py: /order]`
