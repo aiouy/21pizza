@@ -47,16 +47,16 @@ def findNearbyStore():
     j = r.json()
 
     if not j['success']:
-    return bad_request('general error')
+    	return bad_request('general error')
 
     the_store = False
     # find nearest open store that delivers
     for store in j['result']['Stores']:
-    is_open = store['IsOpen']
-    is_delivery_store = store['IsDeliveryStore']
-    if is_open and is_delivery_store:
-        the_store = store
-        break
+    	is_open = store['IsOpen']
+    	is_delivery_store = store['IsDeliveryStore']
+    	if is_open and is_delivery_store:
+        	the_store = store
+        	break
     # delete these after testing
     #if not the_store:
     #  return bad_request('no nearby stores exist, or none are open')
