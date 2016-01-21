@@ -36,8 +36,8 @@
 ### server.py
 
 
-- [ ] Receive zip code from client.py, call order.js `[/findStores/:zipCode]` to find nearest store
-- [ ] Get store menu by calling order.js `[/getMenu/:storeId]` and return store location & menu to client.py
+- [X] Receive zip code from client.py, call order.js `[/findStores/:zipCode]` to find nearest store
+- [X] Get store menu by calling order.js `[/getMenu/:storeId]` and return store location & menu to client.py
 - [ ] Validate passing order to order.js `[/validateAndPrice]` using function `get_price`
 - [ ] If order is valid, find bitpay bbb usd/btc rate and return price to client.py
 - [ ] Receive confirmed order, run though `get_price` again and set `[/order]` endpoint `@payment.required(get_price)` to price in satoshi
@@ -45,7 +45,7 @@
 
 ### order.js
 
-- [ ] Run `dominos` npm package to connect to dominos' ordering API.
+- [X] Run `dominos` npm package to connect to dominos' ordering API.
 - [ ] Store credit/debit card to order pizza
 - [ ] Create a bitpay/coinbase invoice to pay credit card invoice
 - [ ] Connect to Shake API to issue a one-time use card for every transaction
