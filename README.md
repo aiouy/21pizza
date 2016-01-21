@@ -23,7 +23,7 @@
 
 ### client.py
 
-- [ ] Prompt user for zip code
+- [X] Prompt user for zip code
 - [ ] Using zip code display menu to nearest store `[server.py: /getMenuForStoreID]`
 - [ ] Prompt user for menu item code(s)
 - [ ] Confirm menu & store location
