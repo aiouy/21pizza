@@ -83,8 +83,10 @@ app.post('/order', function(req, res) {
 
   order.place(
     function(result) {
+      var prettyResult = JSON.stringify(result, null, 4);
       console.log("Order placed!");
-      res.send(JSON.stringify(result, null, 4));
+      console.log(prettyResult);
+      res.send(prettyResult);
     }
   );
 
