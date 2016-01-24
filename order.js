@@ -47,11 +47,10 @@ app.post('/validateAndPrice', function(req, res) {
 
   order.validate(
     function(validateResult) {
-      // console.log("Validate! " + JSON.stringify(validateResult, null, 4));
+      console.log("Validate! " + JSON.stringify(validateResult, null, 4));
       order.price(
         function(priceResult) {
-          // console.log("Price! " + JSON.stringify(priceResult, null, 4));
-          console.log(JSON.stringify(order, null, 4));
+          console.log("Price! " + JSON.stringify(priceResult, null, 4));
           res.send(JSON.stringify(priceResult, null, 4));
         }
       );

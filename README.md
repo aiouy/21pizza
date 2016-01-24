@@ -28,9 +28,9 @@
 - [X] Prompt user for menu item code(s)
 - [X] Confirm menu & store location
 - [X] Prompt user for full address
-- [ ] Build order and send request to server.py for verification `[server.py: /validate]`
-- [ ] Server.py returns price if order is valid and prompts confirmation of payment in usd & satoshi. If order is not valid, throw error
-- [ ] Complete order `[server.py: /order]`
+- [X] Build order and send request to server.py for verification `[server.py: /validate]`
+- [X] Server.py returns price if order is valid and prompts confirmation of payment in usd & satoshi. If order is not valid, throw error
+- [] Complete order `[server.py: /order]`
 - [ ] Return order confirmation
 
 ### server.py
@@ -38,8 +38,8 @@
 
 - [X] Receive zip code from client.py, call order.js `[/findStores/:zipCode]` to find nearest store
 - [X] Get store menu by calling order.js `[/getMenu/:storeId]` and return store location & menu to client.py
-- [ ] Validate passing order to order.js `[/validateAndPrice]` using function `get_price`
-- [ ] If order is valid, find bitpay bbb usd/btc rate and return price to client.py
+- [X] Validate passing order to order.js `[/validateAndPrice]` using function `get_price`
+- [X] If order is valid, find bitpay bbb usd/btc rate and return price to client.py
 - [ ] Receive confirmed order, run though `get_price` again and set `[/order]` endpoint `@payment.required(get_price)` to price in satoshi
 
 
