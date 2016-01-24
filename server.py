@@ -3,7 +3,6 @@ from two1.lib.wallet import Wallet
 from two1.lib.bitserv.flask import Payment
 from flask import Flask, request, jsonify
 
-import urllib.request
 import json
 import requests
 
@@ -18,20 +17,31 @@ def bad_request(message):
     response = json.dumps({'error': message})
     return response
 
+def usd_per_btc():
+    return requests.get('https://bitpay.com/api/rates/usd').json()['rate']
 
-# Validation & get price. Runs through domino validation call and returns the price of the order if valid, else price=0
+def usd_to_satoshi(price_in_usd):
+    return price_in_usd * 10**8 / usd_per_btc()
+
+# check validation and return dominos' response
+def dominos_validation(request):
+    return requests.post(url=EXPRESS_SERVER + 'validateAndPrice',
+                      json=json.loads(request.get_data(as_text=True)))
+
+
+# Validation & get price. Runs through domino validation call and returns
+# the price of the order if valid, else price=0
 def get_price(request):
-    r = requests.post(url=EXPRESS_SERVER + 'validateAndPrice', json=json.loads(request.data))
+    r = dominos_validation(request)
     response_status = json.loads(r.text)['result']['Status']
 
-    if int(response_status) == 1 or int(response_status) == 0: # not sure what the dominos api response codes are but these seem to not err
-        price_in_usd = json.loads(r.text)['result']['Order']['Amounts']['Payment']
+    # not sure what the dominos api response codes are but these seem to not
+    # err
+    if int(response_status) == 1 or int(response_status) == 0:
+        price_in_usd = json.loads(r.text)['result']['Order'][
+            'Amounts']['Payment']
 
-        get_bitpay_btc_usd_rate = urllib.request.urlopen(url='https://bitpay.com/api/rates/usd').read().decode('utf-8')
-        usd_per_btc = json.loads(get_bitpay_btc_usd_rate)['rate']
-
-        price = int(price_in_usd * 10**8 / usd_per_btc)
-        print(price)
+        price = int(usd_to_satoshi(price_in_usd))
     else:
         setattr(request, 'error_validate', 'error_validate')
         price = 0
@@ -47,18 +57,18 @@ def findNearbyStore():
     j = r.json()
 
     if not j['success']:
-    	return bad_request('general error')
+        return bad_request('general error')
 
     the_store = False
     # find nearest open store that delivers
     for store in j['result']['Stores']:
-    	is_open = store['IsOpen']
-    	is_delivery_store = store['IsDeliveryStore']
-    	if is_open and is_delivery_store:
-        	the_store = store
-        	break
+        is_open = store['IsOpen']
+        is_delivery_store = store['IsDeliveryStore']
+        if is_open and is_delivery_store:
+            the_store = store
+            break
     # delete these after testing
-    #if not the_store:
+    # if not the_store:
     #  return bad_request('no nearby stores exist, or none are open')
     the_store = j['result']['Stores'][0]
 
@@ -67,7 +77,8 @@ def findNearbyStore():
     response['store_id'] = the_store['StoreID']
     response['phone'] = the_store['Phone']
     response['address'] = the_store['AddressDescription']
-    response['delivery_times'] = the_store['ServiceHoursDescription']['Delivery']
+    response['delivery_times'] = the_store[
+        'ServiceHoursDescription']['Delivery']
 
     # get menu and send back to client
     menu_url = EXPRESS_SERVER + 'getMenu/' + response['store_id']
@@ -76,23 +87,54 @@ def findNearbyStore():
     return json.dumps(response)
 
 
-# Orders the pizza. Should pass the user though /validate first but this will run a validation check as well
+# Orders the pizza. Should pass the user though /validate first but this
+# will run a validation check as well
 @app.route('/order', methods=['POST'])
 @payment.required(get_price) # get_price function call. If order is invalid, the user is not charged.
 def order():
     if hasattr(request, 'error_validate'):
         return bad_request('There is a problem with your order details.')
 
-    # TODO: call order function on order.js
-    return 'Pizza ordered!' # TODO: Add response details
+    r = json.loads(requests.post(url=EXPRESS_SERVER + 'order',
+                      json=json.loads(request.get_data(as_text=True))).text)
+
+    response_status = r['result']['Status']
+
+    if response_status == 0 or response_status == 1:
+        order_id = r['result']['Order']['OrderID']
+        response_text = 'Order placed! Your order ID is {0}'.format(order_id)
+        response = {'status': 'success', 'text': response_text}
+    else:
+        response_text = 'Something in your order went wrong. Try again, friend.'
+        response = {'status': 'error', 'text': response_text}
+
+    return jsonify(response)
 
 
-# Runs dominos validate function and should return price if the order details are valid, else return error
+# Runs dominos validate function and should return price if the order
+# details are valid, else return error
 @app.route('/validate', methods=['POST'])
 def validate():
-    price = get_price(request)
-    return 'price = {0}'.format(price) # TODO: return error if price = 0
 
+    price_in_satoshi = get_price(request)
+
+    if price_in_satoshi:
+
+        products = json.loads(dominos_validation(request).text)['result']['Order']['Products']
+        price_in_usd = json.loads(dominos_validation(request).text)['result']['Order']['Amounts']['Payment']
+
+        product_list_for_reponse = ''
+        for item in products:
+            product_list_for_reponse += item['Name']
+            product_list_for_reponse += ', '
+
+        response_text = '{0}for {1} satoshi (${2}). Confirm? (yes/no)'.format(product_list_for_reponse, price_in_satoshi, price_in_usd)
+        response = {'status': 'success', 'text': response_text}
+    else:
+        response_text = 'Something in your order went wrong. Try again, friend.'
+        response = {'status': 'error', 'text': response_text}
+
+    return jsonify(response)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
