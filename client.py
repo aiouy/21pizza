@@ -90,24 +90,29 @@ def pizza():
     parameters["customer"] = customer
     parameters["items"] = [list(x.values())[0] for x in chosenItems]
     parameters["storeID"] = r["store_id"]
+    parameters["cardNumber"] = input("Credit Card Number: ")
+    parameters["cardExp"] = input("Credit Card Expiration Date (27/12): ")
+    parameters["cardCCV"] = input("Credit Card CCV: ")
+    parameters["cardZip"] = input("Credit Card Zip Code: ")
 
     # validate the user"s order and return the price in USD
     resp = json.loads(requests.post(server_url + 'validate', json=parameters).text)
 
     # check if order details are valid
-    if resp['status'] == 'success':
-        # ask user for confirmation
-        confirm = input(resp['text']+'\n')
-        if confirm == 'yes':
-            print('Placing order...')
-            order = json.loads(requests.post(server_url + 'order', json=parameters).text)
-            print(order['text'])
-            # if error, exit
-            if order['status'] == 'error':
-                sys.exit(1)
-
-    else:
+    if resp['status'] != 'success':
         print(resp['text'])
+        sys.exit(1)
+
+    # ask user for confirmation
+    confirm = input(resp['text'])
+    if confirm != 'yes':
+        print("\n" + random.choice(bitcoin_pizza_goodbyes))
+        sys.exit(1)
+    print('Placing order...')
+    order = json.loads(requests.post(server_url + 'order', json=parameters).text)
+    print(order['text'])
+    # if error, exit
+    if order['status'] == 'error':
         sys.exit(1)
 
 # start

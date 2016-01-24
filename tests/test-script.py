@@ -1,5 +1,6 @@
 import json
 import requests
+import sys
 import os
 
 # server address
@@ -24,7 +25,13 @@ order = {
     # of the store whose ID is STORE_ID
     "items": [os.getenv('ITEM1', 'B8PCSCB'), os.getenv('ITEM2', '8TWISTY')],
 
-    "storeID": os.getenv('STORE_ID', '7931')
+    "storeID": os.getenv('STORE_ID', '7931'),
+
+    # fake credit card account, should fail
+    "cardNumber": os.getenv('PIZZAPI_CARD_NUMBER', '4242424242424242'),
+    "cardExp": os.getenv('PIZZAPI_CARD_EXPIRATION', '0115'),
+    "cardCCV": os.getenv('PIZZAPI_CARD_CVV', '007'),
+    "cardZip": os.getenv('PIZZAPI_CARD_ZIP', '90210')
 }
 
 
