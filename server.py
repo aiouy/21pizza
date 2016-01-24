@@ -123,12 +123,12 @@ def validate():
         products = json.loads(dominos_validation(request).text)['result']['Order']['Products']
         price_in_usd = json.loads(dominos_validation(request).text)['result']['Order']['Amounts']['Payment']
 
-        product_list_for_reponse = ''
+        product_list_for_response = ''
         for item in products:
-            product_list_for_reponse += item['Name']
-            product_list_for_reponse += ', '
+            product_list_for_response += item['Name']
+            product_list_for_response += ', '
 
-        response_text = '{0}for {1} satoshi (${2}). Confirm? (yes/no)'.format(product_list_for_reponse, price_in_satoshi, price_in_usd)
+        response_text = '{0}for {1} satoshi (${2}). Confirm? (yes/no)'.format(product_list_for_response, price_in_satoshi, price_in_usd)
         response = {'status': 'success', 'text': response_text}
     else:
         response_text = 'Something in your order went wrong. Try again, friend.'
