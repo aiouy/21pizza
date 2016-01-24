@@ -82,8 +82,8 @@ def pizza():
     customer["phone"] = input("Phone Number: ")
     customer["email"] = input("Email: ")
     address = {}
-    address["street"] = input("Street Address: ")
-    address["city"] = input("City: ")
+    address["Street"] = input("Street Address: ")
+    address["City"] = input("City: ")
     address["Region"] = input("State: ")
     address["PostalCode"] = input("Zip Code: ")
     customer["address"] = address
