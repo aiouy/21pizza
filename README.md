@@ -30,7 +30,7 @@
 - [X] Prompt user for full address
 - [X] Build order and send request to server.py for verification `[server.py: /validate]`
 - [X] Server.py returns price if order is valid and prompts confirmation of payment in usd & satoshi. If order is not valid, throw error
-- [] Complete order `[server.py: /order]`
+- [ ] Complete order `[server.py: /order]`
 - [ ] Return order confirmation
 
 ### server.py
