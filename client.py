@@ -79,6 +79,8 @@ def pizza():
     customer = {}
     customer["firstName"] = input("First Name: ")
     customer["lastName"] = input("Last Name: ")
+    customer["phone"] = input("Phone Number: ")
+    customer["email"] = input("Email: ")
     address = {}
     address["street"] = input("Street Address: ")
     address["city"] = input("City: ")
@@ -90,10 +92,23 @@ def pizza():
     parameters["storeID"] = r["store_id"]
 
     # validate the user"s order and return the price in USD
-    resp = requests.post(server_url + "validate", data=parameters)
+    resp = json.loads(requests.post(server_url + 'validate', json=parameters).text)
 
-    print(resp.text)
+    # check if order details are valid
+    if resp['status'] == 'success':
+        # ask user for confirmation
+        confirm = input(resp['text']+'\n')
+        if confirm == 'yes':
+            print('Placing order...')
+            order = json.loads(requests.post(server_url + 'order', json=parameters).text)
+            print(order['text'])
+            # if error, exit
+            if order['status'] == 'error':
+                sys.exit(1)
 
+    else:
+        print(resp['text'])
+        sys.exit(1)
 
 # start
 if __name__ == "__main__":
