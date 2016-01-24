@@ -28,10 +28,10 @@ order = {
     "storeID": os.getenv('STORE_ID', '7931'),
 
     # fake credit card account, should fail
-    "cardNumber": os.getenv('PIZZAPI_CARD_NUMBER', '4242424242424242'),
-    "cardExp": os.getenv('PIZZAPI_CARD_EXPIRATION', '0115'),
-    "cardCCV": os.getenv('PIZZAPI_CARD_CVV', '007'),
-    "cardZip": os.getenv('PIZZAPI_CARD_ZIP', '90210')
+    "cardNumber": os.getenv('TEST_PIZZAPI_CARD_NUMBER', '4242424242424242'),
+    "cardExp": os.getenv('TEST_PIZZAPI_CARD_EXPIRATION', '0115'),
+    "cardCCV": os.getenv('TEST_PIZZAPI_CARD_CVV', '007'),
+    "cardZip": os.getenv('TEST_PIZZAPI_CARD_ZIP', '90210')
 }
 
 

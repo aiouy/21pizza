@@ -33,19 +33,24 @@ def dominos_validation(request):
 # the price of the order if valid, else price=0
 def get_price(request):
     r = dominos_validation(request)
-    response_status = json.loads(r.text)['result']['Status']
+    resp = json.loads(r.text)
+    order = resp['result']['Order']
+    response_status = resp['result']['Status']
 
     # not sure what the dominos api response codes are but these seem to not
     # err
     if int(response_status) == 1 or int(response_status) == 0:
-        price_in_usd = json.loads(r.text)['result']['Order'][
-            'Amounts']['Payment']
+        price_in_usd = order['Amounts']['Payment']
 
         price = int(usd_to_satoshi(price_in_usd))
+    # pass error values up to calling function
+    # a price of 0 causes two1 402 payment to fail
     else:
         setattr(request, 'error_validate', 'error_validate')
+        setattr(request, 'error_values', order['StatusItems'])
         price = 0
 
+    print('PRICE: ' + str(price))
     return price
 
 
@@ -93,7 +98,7 @@ def findNearbyStore():
 @payment.required(get_price) # get_price function call. If order is invalid, the user is not charged.
 def order():
     if hasattr(request, 'error_validate'):
-        return bad_request('There is a problem with your order details.')
+        return bad_request('There is a problem with your order details: ' + str(getattr(request, 'error_values')))
 
     r = json.loads(requests.post(url=EXPRESS_SERVER + 'order',
                       json=json.loads(request.get_data(as_text=True))).text)
@@ -120,8 +125,9 @@ def validate():
 
     if price_in_satoshi:
 
-        products = json.loads(dominos_validation(request).text)['result']['Order']['Products']
-        price_in_usd = json.loads(dominos_validation(request).text)['result']['Order']['Amounts']['Payment']
+        order = json.loads(dominos_validation(request).text)['result']['Order']
+        products = order['Products']
+        price_in_usd = order['Amounts']['Payment']
 
         product_list_for_response = ''
         for item in products:
@@ -132,7 +138,8 @@ def validate():
         response = {'status': 'success', 'text': response_text}
     else:
         response_text = 'Something in your order went wrong. Try again, friend.'
-        response = {'status': 'error', 'text': response_text}
+        print('Errors: ' + str(getattr(request, 'error_values')))
+        response = {'status': 'error', 'text': response_text, 'error_values': str(getattr(request, 'error_values'))}
 
     return jsonify(response)
 

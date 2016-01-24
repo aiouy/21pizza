@@ -38,7 +38,7 @@ def pizza():
     print("\nAddress:        " + r["address"])
     print("Phone:          " + r["phone"])
     print("Delivery Times: " + r["delivery_times"] + "\n")
-    ok = input("The above Domino's store will prepare and deliver your meal. Type 'ok' if this store works for you: ")
+    ok = input("The above Domino's store will prepare and deliver your meal. Type 'ok' if this store is acceptable: ")
     if ok != "ok":
         print("\n" + random.choice(bitcoin_pizza_goodbyes))
         sys.exit(1)
@@ -101,6 +101,7 @@ def pizza():
     # check if order details are valid
     if resp['status'] != 'success':
         print(resp['text'])
+        print('Errors: ' + resp['error_values'])
         sys.exit(1)
 
     # ask user for confirmation
