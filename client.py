@@ -38,7 +38,7 @@ def pizza():
     print("\nAddress:        " + r["address"])
     print("Phone:          " + r["phone"])
     print("Delivery Times: " + r["delivery_times"] + "\n")
-    ok = input("The above Domino's store will prepare and deliver your meal. Type 'ok' if this store works for you: ")
+    ok = input("The above Domino's store will prepare and deliver your meal. Type 'ok' if this store is acceptable: ")
     if ok != "ok":
         print("\n" + random.choice(bitcoin_pizza_goodbyes))
         sys.exit(1)
@@ -82,32 +82,38 @@ def pizza():
     customer["phone"] = input("Phone Number: ")
     customer["email"] = input("Email: ")
     address = {}
-    address["street"] = input("Street Address: ")
-    address["city"] = input("City: ")
+    address["Street"] = input("Street Address: ")
+    address["City"] = input("City: ")
     address["Region"] = input("State: ")
     address["PostalCode"] = input("Zip Code: ")
     customer["address"] = address
     parameters["customer"] = customer
     parameters["items"] = [list(x.values())[0] for x in chosenItems]
     parameters["storeID"] = r["store_id"]
+    parameters["cardNumber"] = input("Credit Card Number: ")
+    parameters["cardExp"] = input("Credit Card Expiration Date (27/12): ")
+    parameters["cardCCV"] = input("Credit Card CCV: ")
+    parameters["cardZip"] = input("Credit Card Zip Code: ")
 
     # validate the user"s order and return the price in USD
     resp = json.loads(requests.post(server_url + 'validate', json=parameters).text)
 
     # check if order details are valid
-    if resp['status'] == 'success':
-        # ask user for confirmation
-        confirm = input(resp['text']+'\n')
-        if confirm == 'yes':
-            print('Placing order...')
-            order = json.loads(requests.post(server_url + 'order', json=parameters).text)
-            print(order['text'])
-            # if error, exit
-            if order['status'] == 'error':
-                sys.exit(1)
-
-    else:
+    if resp['status'] != 'success':
         print(resp['text'])
+        print('Errors: ' + resp['error_values'])
+        sys.exit(1)
+
+    # ask user for confirmation
+    confirm = input(resp['text'])
+    if confirm != 'yes':
+        print("\n" + random.choice(bitcoin_pizza_goodbyes))
+        sys.exit(1)
+    print('Placing order...')
+    order = json.loads(requests.post(server_url + 'order', json=parameters).text)
+    print(order['text'])
+    # if error, exit
+    if order['status'] == 'error':
         sys.exit(1)
 
 # start
