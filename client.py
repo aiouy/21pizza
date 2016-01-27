@@ -91,7 +91,7 @@ def pizza():
     parameters["items"] = [list(x.values())[0] for x in chosenItems]
     parameters["storeID"] = r["store_id"]
     parameters["cardNumber"] = input("Credit Card Number: ")
-    parameters["cardExp"] = input("Credit Card Expiration Date (27/12): ")
+    parameters["cardExp"] = input("Credit Card Expiration Date in MMYY (ie: 0519): ")
     parameters["cardCCV"] = input("Credit Card CCV: ")
     parameters["cardZip"] = input("Credit Card Zip Code: ")
 
